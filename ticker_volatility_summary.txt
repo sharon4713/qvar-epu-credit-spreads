@@ -1,0 +1,34 @@
+===========================================================================
+  TICKER VOLATILITY SUMMARY  |  2015–2025
+  Volatility: 30-day rolling annualised log-return std dev (resamp. monthly)
+  EPU source: US_merged_v2.csv
+===========================================================================
+
+  Company            Ticker  Rating      Avg Vol    Corr(EPU)     N
+  ---------------------------------------------------------------------------
+  Apple              AAPL    AAA          0.2646       0.5253   132
+  Microsoft          MSFT    AA           0.2466       0.3715   132
+  JPMorgan           JPM     A            0.2387       0.5346   132
+  Amazon             AMZN    AA           0.3057       0.3317   132
+  Ford               F       BBB          0.3257       0.4192   132
+  Tesla              TSLA    BB           0.5365       0.5332   132
+  General Motors     GM      BB           0.3269       0.5327   132
+  Bank of America    BAC     A            0.2766       0.5080   132
+
+===========================================================================
+  NOTES
+===========================================================================
+  Rating proxies are illustrative (not official Moody's/S&P ratings).
+  Correlation is Pearson between monthly EPU and monthly avg volatility.
+  Avg Vol is in annualised decimal units (e.g. 0.30 = 30% p.a.).
+===========================================================================
+
+  Sample of monthly volatility data (first 5 rows):
+  Ticker          AAPL      AMZN       BAC         F        GM       JPM      MSFT      TSLA
+Date                                                                                      
+2015-01-01  0.290051  0.270193  0.302299  0.274440  0.263751  0.273806  0.278325  0.379035
+2015-02-01  0.311303  0.441945  0.330353  0.237626  0.277654  0.277111  0.374034  0.362634
+2015-03-01  0.238127  0.296012  0.230955  0.195066  0.221477  0.195863  0.236375  0.355568
+2015-04-01  0.205663  0.241050  0.166607  0.166597  0.185862  0.170515  0.235150  0.358234
+2015-05-01  0.221532  0.433752  0.144218  0.134654  0.171911  0.146295  0.350237  0.311921
+
