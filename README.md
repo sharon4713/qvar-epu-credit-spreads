@@ -58,4 +58,3 @@ How does credit quality (BBB-AAA spread) moderate this transmission?
 ---
 
 
-### Transmission Chain

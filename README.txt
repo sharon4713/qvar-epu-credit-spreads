@@ -56,6 +56,3 @@ How does credit quality (BBB-AAA spread) moderate this transmission?
 3. **Scenario Translation** — Convert regulatory scenarios to EPU levels, then estimate capital impact using model coefficients.
 4. **Credit Quality Monitoring** — BBB-AAA spread widening (credit stress signal) + EPU spike = amplified transmission mechanism for HY bonds. 
 ---
-
-
-### Transmission Chain
