@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 from statsmodels.regression.quantile_regression import QuantReg
 
-BASE   = r'C:\Users\simeo\OneDrive\Desktop\qvar'
+BASE   = r'C:\Users\simeo\OneDrive\Desktop\qvar-epu-credit-spreads'
 LAGS   = 2
 TAUS   = [0.05, 0.25, 0.50, 0.75, 0.95]
 VARS   = ['EPU', 'credit_spread', 'yield_curve_slope', 'bbb_aaa_spread', 'epu_bbb_aaa']

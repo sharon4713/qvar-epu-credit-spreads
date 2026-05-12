@@ -1,7 +1,7 @@
 import pandas as pd
 import os
 
-base = r'C:\Users\simeo\OneDrive\Desktop\qvar'
+base = r'C:\Users\simeo\OneDrive\Desktop\qvar-epu-credit-spreads'
 
 df_main = pd.read_csv(os.path.join(base, 'US_merged.csv'), parse_dates=['date'])
 df_main = df_main.rename(columns={'News_Based_Policy_Uncert_Index': 'EPU'})

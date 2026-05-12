@@ -1,0 +1,111 @@
+
+================================================================================
+  QUANTILE VAR — SCENARIO STRESS TESTING TOOL
+  EPU  ->  Credit spread  ->  Portfolio capital impact    |    2026-05-12  12:25
+================================================================================
+
+  Loading: US_merged_v2.csv
+  OK  240 observations loaded.
+
+────────────────────────────────────────────────────────────────────────────────
+  1/7  DATA SUMMARY
+────────────────────────────────────────────────────────────────────────────────
+
+  Date range    :  2005-01  ->  2024-12
+  Observations  :  240  monthly
+
+  Variable                      Min     Mean   Median      Max   StdDev
+  ───────────────────────────────────────────────────────────────
+  EPU (index)                 44.78   144.81   134.00   503.96    67.39
+  Credit spread (%)            1.41     2.46     2.27     6.01     0.79
+  Yield curve slope (%)       -0.93     1.00     0.96     2.83     0.97
+  Baa-Aaa spread (%)           0.55     1.03     0.93     3.38     0.43
+
+────────────────────────────────────────────────────────────────────────────────
+  2/7  HISTORICAL CRISIS SCENARIOS — PEAK EPU
+────────────────────────────────────────────────────────────────────────────────
+
+  Scenario              Window                    Peak EPU  Peak Date     Baseline   EPU Shock
+  ───────────────────────────────────────────────────────────────────────────────────
+  GFC 2008              2007-09 - 2009-03            241.8  2008-10           68.4       173.4
+  Eurozone Crisis       2011-06 - 2012-12            283.7  2011-08          105.8       177.9
+  COVID-19 Shock        2020-01 - 2020-05            504.0  2020-05          127.9       376.0
+  Fed Rate Shock        2021-12 - 2022-12            229.2  2022-03          142.1        87.2
+  Russia-Ukraine War    2022-02 - 2022-12            229.2  2022-03          142.4        86.8
+
+────────────────────────────────────────────────────────────────────────────────
+  3/7  STRESS IMPACT MATRIX  (t = 0.95 crisis quantile)
+────────────────────────────────────────────────────────────────────────────────
+
+  QVAR EPU sensitivity  at t=0.95  :  65.8609
+  Rule  ->  spread widening (bps)  =  65.86 x EPU_Shock / 100
+
+  Scenario               EPU Shock  Delta Spread (bps)   Baseline (%)  Stressed (%)   Widening
+  ─────────────────────────────────────────────────────────────────────────────────────
+  GFC 2008                   173.4              114.19          1.717         2.859      66.5%
+  Eurozone Crisis            177.9              117.14          2.657         3.828      44.1%
+  COVID-19 Shock             376.0              247.67          2.600         5.077      95.2%
+  Fed Rate Shock              87.2               57.41          2.572         3.146      22.3%
+  Russia-Ukraine War          86.8               57.17          2.565         3.137      22.3%
+
+────────────────────────────────────────────────────────────────────────────────
+  4/7  PORTFOLIO PARAMETERS
+────────────────────────────────────────────────────────────────────────────────
+
+
+  Notional                 :  $     500.0M
+  Duration                 :          4.0 years
+  Capital buffer           :  $      50.0M
+
+────────────────────────────────────────────────────────────────────────────────
+  5/7  CAPITAL IMPACT
+────────────────────────────────────────────────────────────────────────────────
+
+  MTM Loss ($M)  =  Notional x Duration x (Delta bps / 10,000)
+  Key:      GREEN < 25%   YELLOW 25-50%   RED > 50%  of capital buffer
+
+  Scenario              Delta Spread (bps)     MTM Loss    % of Capital  Status    
+  ───────────────────────────────────────────────────────────────────────────────
+  GFC 2008                          114.19  $     22.8M    45.7%  MODERATE
+  Eurozone Crisis                   117.14  $     23.4M    46.9%  MODERATE
+  COVID-19 Shock                    247.67  $     49.5M    99.1%  MATERIAL
+  Fed Rate Shock                     57.41  $     11.5M    23.0%  LOW
+  Russia-Ukraine War                 57.17  $     11.4M    22.9%  LOW
+
+────────────────────────────────────────────────────────────────────────────────
+  6/7  REGIME SENSITIVITY — ALL t
+────────────────────────────────────────────────────────────────────────────────
+
+        t  Regime               EPU Coeff   vs Median  Interpretation                    
+  ──────────────────────────────────────────────────────────────────────────────
+    t=0.05  Calm                     27.36        2.2x  1pt EPU  ->  27.4 bps spread      
+    t=0.25  Mild stress              31.28        2.5x  1pt EPU  ->  31.3 bps spread      
+    t=0.50  Normal                   12.56        1.0x  1pt EPU  ->  12.6 bps spread      
+    t=0.75  Elevated stress           4.87        0.4x  1pt EPU  ->  4.9 bps spread       
+    t=0.95  Crisis / tail            65.86        5.2x  1pt EPU  ->  65.9 bps spread      
+
+  Amplification ratio  t=0.95 / t=0.50  =  5.2x
+  EPU-to-spread transmission is 5.2x stronger in crisis vs normal regimes.
+  Non-linear EPU pass-through is the key finding of the multivariate QVAR.
+
+────────────────────────────────────────────────────────────────────────────────
+  7/7  IN-SAMPLE COVERAGE CHECK  (t = 0.95 model validation)
+────────────────────────────────────────────────────────────────────────────────
+
+  Observations (after 2 lags)   :  237
+  Covered (actual <= pred t=0.95):  229  (96.6%)
+  Expected nominal coverage      :  95.0%
+  Coverage differential          :  +1.6 pp
+
+  Verdict:  PASS  — Empirical coverage consistent.
+
+================================================================================
+  METHODOLOGY
+  ────────────────────────────────────────────────────────────────────────────
+  Model    :  Multivariate QVAR  |  5 variables  |  2 lags  |  240 monthly obs
+  Period   :  2005-01 - 2024-12
+  Spread   :  EPU_sens(t=0.95) x EPU_Shock / 100   [bps]
+  MTM loss :  Notional x Duration x (Delta bps / 10,000)
+  Coverage :  actual credit_spread <= predicted t=0.95 quantile
+================================================================================
+

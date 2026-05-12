@@ -32,7 +32,7 @@ How does credit quality (BBB-AAA spread) moderate this transmission?
 ### Dataset
 - **Variables:** EPU (News-Based Policy Uncertainty Index), BAA corporate spreads (Moody's), yield curve slope (T10Y2Y), BBB-AAA quality spread, EPU×BBB-AAA 
 - **Source:** FRED + policyuncertainty.com
-- **Sample:** 2005-01 to 2025-12 (251 monthly observations)
+- **Sample:** 2005-01 to 2024-12 (251 monthly observations)
 - **Pre-testing:** ADF tests confirm EPU, credit_spread, bbb_aaa stationary in levels; yield_curve_slope first-differenced (p=0.0001)
 
 ### Model Specification

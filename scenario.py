@@ -6,6 +6,13 @@ QVAR Scenario Stress Testing Tool
 
 import sys
 import os
+import io
+
+# Fix Windows CMD Unicode encoding
+if sys.platform == 'win32':
+    # Force UTF-8 output on Windows
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+    sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8')
 import pandas as pd
 import numpy as np
 from datetime import datetime
@@ -140,20 +147,20 @@ def main():
     )
 
     # ── Data path ─────────────────────────────────────────────────────────────
-    if len(sys.argv) > 1:
-        data_path = sys.argv[1]
-    else:
+    import argparse
 
-        suggestion = 'US_merged_v2.csv'
-        if not sys.stdin.isatty():
-            data_path = suggestion
-        else:
-            try:
-                raw = input(f'\n  Data file path (default path) [{suggestion}]: ').strip()
-                data_path = raw if raw else suggestion
-            except EOFError:
+    parser = argparse.ArgumentParser(
+    description='QVAR Scenario Stress Testing Tool'
+)
+    parser.add_argument(
+    'data_path',
+    nargs='?',                      # optional positional argument
+    default='US_merged_v2.csv',     # default if nothing passed
+    help='Path to merged CSV file (default: US_merged_v2.csv)'
+)
+    args = parser.parse_args()
+    data_path = args.data_path
 
-                data_path = suggestion
 
     print(f'\n  Loading: {data_path}')
     try:
@@ -244,9 +251,17 @@ def main():
     section(4, 7, 'PORTFOLIO PARAMETERS', W)
     print()
 
-    notional = ask('Portfolio notional ($M)',   500.0, float)
-    duration = ask('Portfolio duration (years)',  4.0, float)
-    capital  = ask('Capital buffer ($M)',         50.0, float)
+    if sys.stdin.isatty():
+    # Interactive mode (running locally)
+     notional = ask('Portfolio notional ($M)',   500.0, float)
+     duration = ask('Portfolio duration (years)',  4.0, float)
+     capital  = ask('Capital buffer ($M)',         50.0, float)
+    else:
+    # Non-interactive mode (GitHub CI or file redirect)
+     notional = 500.0
+     duration = 4.0
+     capital = 50.0
+    print(f'\n  {C.DIM}(Using default portfolio parameters — TTY not available){C.RESET}')
 
     print(f'\n  {"Notional":25s}:  ${notional:>10,.1f}M')
     print(f'  {"Duration":25s}:  {duration:>11.1f} years')

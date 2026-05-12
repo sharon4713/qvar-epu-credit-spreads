@@ -3,7 +3,7 @@ import pandas as pd
 import yfinance as yf
 import os
 
-BASE = r'C:\Users\simeo\OneDrive\Desktop\qvar'
+BASE = r'C:\Users\simeo\OneDrive\Desktop\qvar-epu-credit-spreads'
 
 TICKERS = ['AAPL', 'MSFT', 'JPM', 'AMZN', 'F', 'TSLA', 'GM', 'BAC']
 NAMES = {
@@ -21,7 +21,7 @@ RATINGS = {
 # ── Download adjusted close prices ───────────────────────────────────────────
 # Start one month early so the 30-day rolling window is full by 2015-01-01
 print("Downloading price data from Yahoo Finance...")
-raw = yf.download(TICKERS, start='2014-12-01', end='2025-12-31',
+raw = yf.download(TICKERS, start='2014-12-01', end='2024-12-01',
                   auto_adjust=True, progress=False)
 
 # Handle MultiIndex (multi-ticker) vs flat (single-ticker) columns
@@ -39,7 +39,7 @@ vol_daily = log_ret.rolling(30).std() * np.sqrt(252)  # annualised
 
 # Resample to month-start to match US_merged_v2.csv's YYYY-MM-01 dates
 vol_monthly = vol_daily.resample('MS').mean()
-vol_monthly = vol_monthly.loc['2015-01-01':'2025-12-31']
+vol_monthly = vol_monthly.loc['2015-01-01':'2024-01-01']
 
 # ── Load EPU data ─────────────────────────────────────────────────────────────
 df_epu = pd.read_csv(os.path.join(BASE, 'US_merged_v2.csv'), parse_dates=['date'])
@@ -82,7 +82,7 @@ def emit(text=''):
     print(text)
 
 emit(SEP)
-emit('  TICKER VOLATILITY SUMMARY  |  2015–2025')
+emit('  TICKER VOLATILITY SUMMARY  |  2015–2024')
 emit('  Volatility: 30-day rolling annualised log-return std dev (resamp. monthly)')
 emit('  EPU source: US_merged_v2.csv')
 emit(SEP)

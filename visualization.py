@@ -82,8 +82,8 @@ legend_patches = [
 # PLOT 1
 # ═══════════════════════════════════════════════════════════════════════════════
 fig1, ax1 = plt.subplots(figsize=(10, 7))
-fig1.suptitle('Company Volatility vs EPU Correlation\n'
-              '(color = rating proxy, 2015–2025)', fontsize=13, fontweight='bold', y=0.98, color=TEXT)
+fig1.suptitle('Company volatility vs EPU correlation\n'
+              '(color = rating proxy, 2015–2024)', fontsize=10, fontweight='bold', y=0.98, color=TEXT)
 
 vols  = np.array([c['avg_vol']  for c in COMPANIES])
 corrs = np.array([c['corr_epu'] for c in COMPANIES])
@@ -108,19 +108,19 @@ for c in COMPANIES:
         f"{c['name']}\n({c['ticker']})",
         xy=(c['avg_vol'], c['corr_epu']),
         xytext=(8, 4), textcoords='offset points',
-        fontsize=8.5, color=TEXT,
+        fontsize=7, color=TEXT,
         bbox=dict(boxstyle='round,pad=0.2', fc='#222222', alpha=0.8, ec='none')
     )
 
-ax1.set_xlabel('Average Annualised Volatility (30-day rolling)', fontsize=12)
-ax1.set_ylabel('Pearson Corr. with EPU', fontsize=12)
+ax1.set_xlabel('Average annualised volatility (30-day rolling)', fontsize=9)
+ax1.set_ylabel('Pearson corr. with EPU', fontsize=9)
 ax1.set_xlim(0.20, 0.60)
 ax1.set_ylim(0.28, 0.60)
 ax1.legend(handles=legend_patches + [Line2D([0], [0], ls='--', color='#888888', label='Trendline')],
-           title='Rating proxy', framealpha=0.9, fontsize=9)
+           title='Rating proxy', framealpha=0.9, fontsize=7)
 
 plt.tight_layout()
-out1 = os.path.join(BASE, 'qvar_ticker_bridge_vol_v2.png')
+out1 = os.path.join(BASE, 'qvar_ticker_bridge_vol.png')
 fig1.savefig(out1, bbox_inches='tight', facecolor=BG)
 plt.close(fig1)
 print(f"Saved: {out1}")
@@ -129,9 +129,9 @@ print(f"Saved: {out1}")
 # PLOT 2
 # ═══════════════════════════════════════════════════════════════════════════════
 fig2, ax2 = plt.subplots(figsize=(10, 7))
-fig2.suptitle('Company Volatility vs QVAR-Inferred Credit Spread Sensitivity to EPU\n'
-              'Sensitivity = cumulative (Lag1+Lag2) EPU→credit_spread coeff × 100-unit EPU shock',
-              fontsize=11.5, fontweight='bold', y=0.98, color=TEXT)
+fig2.suptitle('Company volatility vs QVAR-inferred credit spread sensitivity to EPU\n'
+              'Sensitivity = (Lag1+Lag2) EPU coefficient × 100-unit EPU shock',
+              fontsize=10, fontweight='bold', y=0.98, color=TEXT)
 
 sens = np.array([c['spread_sens_bps'] for c in COMPANIES])
 vols = np.array([c['avg_vol']         for c in COMPANIES])
@@ -147,7 +147,7 @@ tau_sens = {tau: EPU_CRDSP_CUM[i] * EPU_SHOCK * 100 for i, tau in enumerate(TAUS
 for rating, tau in RATING_TAU.items():
     s = tau_sens[tau]
     ax2.axhline(s, color=RATING_COLOR[rating], linewidth=0.8, linestyle=':', alpha=0.6)
-    ax2.text(0.205, s + 0.15, f'τ={tau}', fontsize=7.5,
+    ax2.text(0.205, s + 0.15, f'τ={tau}', fontsize=7,
              color=RATING_COLOR[rating], alpha=0.9)
 
 for c in COMPANIES:
@@ -157,23 +157,23 @@ for c in COMPANIES:
         f"{c['name']}\n({c['ticker']})",
         xy=(c['avg_vol'], c['spread_sens_bps']),
         xytext=(8, 4), textcoords='offset points',
-        fontsize=8.5, color=TEXT,
+        fontsize=7, color=TEXT,
         bbox=dict(boxstyle='round,pad=0.2', fc='#222222', alpha=0.8, ec='none')
     )
 
-ax2.set_xlabel('Average Annualised Volatility (30-day rolling)', fontsize=12)
-ax2.set_ylabel('Credit Spread Response to EPU Shock (bps)\nper +100-unit EPU increase, cumulative 2-period', fontsize=11)
+ax2.set_xlabel('Average Annualised Volatility (30-day rolling)', fontsize=9)
+ax2.set_ylabel('Spread Response to +100-unit EPU Shock (bps)\n, cumulative over 2 month period', fontsize=11)
 ax2.set_xlim(0.20, 0.60)
 ax2.legend(handles=legend_patches + [Line2D([0], [0], ls='--', color='#888888', label='Trendline')],
-           title='Rating proxy (→ QVAR τ)', framealpha=0.9, fontsize=9)
+           title='Rating proxy (→ QVAR τ)', framealpha=0.9, fontsize=8)
 
 ax2.text(0.99, 0.02,
-         'Rating → QVAR quantile: AAA→τ=0.05  AA→τ=0.25  A→τ=0.50  BBB→τ=0.75  BB→τ=0.95',
-         transform=ax2.transAxes, fontsize=7.5, ha='right', va='bottom', color='#aaaaaa',
+         'AAA→τ=0.05  AA→τ=0.25  A→τ=0.50  BBB→τ=0.75  BB→τ=0.95',
+         transform=ax2.transAxes, fontsize=7, ha='right', va='bottom', color='#aaaaaa',
          style='italic')
 
 plt.tight_layout()
-out2 = os.path.join(BASE, 'qvar_ticker_bridge_spreads_v2.png')
+out2 = os.path.join(BASE, 'qvar_ticker_bridge_spreads.png')
 fig2.savefig(out2, bbox_inches='tight', facecolor=BG)
 plt.close(fig2)
 print(f"Saved: {out2}")
@@ -183,8 +183,8 @@ print(f"Saved: {out2}")
 # ═══════════════════════════════════════════════════════════════════════════════
 fig3, (ax3a, ax3b) = plt.subplots(2, 1, figsize=(11, 10), sharex=True,
                                    gridspec_kw={'height_ratios': [3, 2]})
-fig3.suptitle('QVAR: EPU Effect on Spreads Across Quantiles\nwith Company Volatility Tier Overlay',
-              fontsize=13, fontweight='bold', y=0.99, color=TEXT)
+fig3.suptitle('QVAR: EPU effect on spreads across quantiles\nwith company volatility overlay',
+              fontsize=10, fontweight='bold', y=0.99, color=TEXT)
 
 tau_labels = [f'τ={t}' for t in TAUS]
 x = np.arange(len(TAUS))
@@ -211,9 +211,9 @@ for i, (tau, rating) in enumerate(zip(TAUS, ['AAA', 'AA', 'A', 'BBB', 'BB'])):
               rating, ha='center', va='bottom', fontsize=8.5,
               color=RATING_COLOR[rating], fontweight='bold')
 
-ax3a.set_ylabel('EPU Effect on Spread (bps)\nper +100-unit EPU shock', fontsize=10.5)
-ax3a.legend(fontsize=8.5, loc='lower left', framealpha=0.9)
-ax3a.set_title('Top: EPU → Spread coefficient magnitude across stress quantiles', fontsize=10, color=TEXT)
+ax3a.set_ylabel('EPU effect on spread (bps)\nper +100-unit EPU shock', fontsize=9)
+ax3a.legend(fontsize=8, loc='lower left', framealpha=0.9)
+ax3a.set_title('EPU → Spread coefficient magnitude across quantiles', fontsize=9, color=TEXT)
 
 plotted_labels = set()
 for c in COMPANIES:
@@ -235,7 +235,7 @@ for c in COMPANIES:
 ax3b_r2 = ax3b.twinx()
 ax3b_r2.plot(x, PSEUDO_R2_CRDSP, 'D:', color='#aaaaaa', linewidth=1.4, markersize=5,
              alpha=0.8, label='crd_spr Pseudo-R²')
-ax3b_r2.set_ylabel('QVAR Pseudo-R²\n(crd_spr eq.)', fontsize=9, color='#aaaaaa')
+ax3b_r2.set_ylabel('QVAR Pseudo-R²', fontsize=9, color='#aaaaaa')
 ax3b_r2.tick_params(axis='y', colors='#aaaaaa', labelsize=8)
 ax3b_r2.set_ylim(0.70, 0.87)
 ax3b_r2.legend(fontsize=8, loc='upper left', framealpha=0.9)
@@ -244,16 +244,16 @@ ax3b_r2.set_facecolor(PANEL_BG)
 ax3b.set_xlim(-0.5, 4.5)
 ax3b.set_xticks(x)
 ax3b.set_xticklabels(tau_labels, fontsize=10)
-ax3b.set_xlabel('QVAR Quantile (τ)  ←  low stress → high stress  →', fontsize=11)
-ax3b.set_ylabel('Avg Annualised\nVolatility (company)', fontsize=10)
-ax3b.set_title('Bottom: Company volatility tiers at their rating-mapped quantile  '
-               '(dotted = QVAR model fit quality)', fontsize=10, color=TEXT)
+ax3b.set_xlabel('Quantiles(τ)  ←  low stress                               high stress  →', fontsize=9)
+ax3b.set_ylabel('Avg Annualised\nVolatility', fontsize=10)
+ax3b.set_title('Company volatilities at their rating-mapped quantiles '
+               '(dotted = QVAR model fit quality)', fontsize=9, color=TEXT)
 
 for i, rating in enumerate(['AAA', 'AA', 'A', 'BBB', 'BB']):
     ax3b.axvspan(i - 0.5, i + 0.5, color=RATING_COLOR[rating], alpha=0.08, zorder=0)
 
 plt.tight_layout(rect=[0, 0, 1, 0.97])
-out3 = os.path.join(BASE, 'qvar_quantile_overlay_v2.png')
+out3 = os.path.join(BASE, 'qvar_quantile_overlay.png')
 fig3.savefig(out3, bbox_inches='tight', facecolor=BG)
 plt.close(fig3)
 print(f"Saved: {out3}")
